@@ -14,6 +14,7 @@ def respond(
     max_tokens,
     temperature,
     top_p,
+    personality,
 ):
     messages = [{"role": "system", "content": system_message}]
 
