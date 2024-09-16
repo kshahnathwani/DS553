@@ -16,6 +16,10 @@ def respond(
     top_p,
     personality,
 ):
+    # Incorporate the personality into the system message
+    system_message = f"{system_message} You are a {personality} chatbot."
+    
+    # Add the system message to the conversation
     messages = [{"role": "system", "content": system_message}]
 
     for val in history:
@@ -24,24 +28,29 @@ def respond(
         if val[1]:
             messages.append({"role": "assistant", "content": val[1]})
 
+    # Add the latest user message
     messages.append({"role": "user", "content": message})
 
     response = ""
 
-    for message in client.chat_completion(
+    # Generate the response from the model
+    for message_chunk in client.chat_completion(
         messages,
         max_tokens=max_tokens,
         stream=True,
         temperature=temperature,
         top_p=top_p,
     ):
-        token = message.choices[0].delta.content
-
+        token = message_chunk.choices[0].delta.content
         response += token
-        yield response
+
+    # Update the chat history by appending the new message and the response
+    history.append((message, response))
+
+    return history  # Return the updated chat history
 
 def clear_chat():
-    return "",[]
+    return "", []
 
 """
 For information on how to customize the ChatInterface, peruse the gradio docs: https://www.gradio.app/docs/chatinterface
@@ -65,7 +74,7 @@ with gr.Blocks() as demo:
 
     clear_button.click(
         clear_chat,
-        outputs=[message,chatbot]
+        outputs=[message, chatbot]
     )
 
 
