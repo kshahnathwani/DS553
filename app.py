@@ -67,9 +67,6 @@ with gr.Blocks() as demo:
         clear_chat,
         outputs=[message,chatbot]
     )
-   
-    
-)
 
 
 if __name__ == "__main__":
