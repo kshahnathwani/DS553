@@ -55,7 +55,13 @@ demo = gr.ChatInterface(
             step=0.05,
             label="Top-p (nucleus sampling)",
         ),
-    ],
+        gr.Dropdown(choices=["friendly", "professional", "humorous", "serious"], value="friendly", label="Personality"),
+   ],
+    button_text="Send Message",
+    clear_button=True,  # Adding clear button
+    title="Custom Chatbot Interface",
+    description="This is a chatbot that can adapt its personality to different styles!",
+    
 )
 
 
